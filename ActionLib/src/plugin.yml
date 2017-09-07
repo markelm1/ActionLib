@@ -1,0 +1,5 @@
+author: SrAldeano
+version: "1.0"
+description: "testdesc"
+main: "me.sraldeano.actionlib.ActionLib"
+name: "ActionLib"

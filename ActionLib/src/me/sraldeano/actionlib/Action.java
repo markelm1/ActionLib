@@ -1,14 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.sraldeano.actionlib;
 
 /**
  *
- * @author markelm
+ * @author SrAldeano
  */
-public class Action {
+public abstract class Action {
     
+    private String name;
+    
+    public Action(String name) {
+        this.name = name;
+    }
+    
+    public final String getName() {
+        return name;
+    }
+    
+    public abstract void onExecute();
 }
