@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.sraldeano.actionlib.Action;
 import me.sraldeano.actionlib.ActionLib;
+import me.sraldeano.actionlib.ActionManager;
 
 /**
  *
@@ -48,6 +49,7 @@ public class AddonLoader {
             actionClass = javaClass.asSubclass(Action.class);
 //            Constructor constructor = actionLibClass.getConstructor();
             this.action =  actionClass.newInstance();
+            ActionManager.registerAction(action, true);
         } catch (ClassCastException | IllegalAccessException | InstantiationException ex) {
             Logger.getLogger(AddonLoader.class.getName()).log(Level.SEVERE, null, ex);
         }

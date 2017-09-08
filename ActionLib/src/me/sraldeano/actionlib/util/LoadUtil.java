@@ -14,4 +14,8 @@ public class LoadUtil {
         PluginManager pm = ActionLib.plugin.getServer().getPluginManager();
         pm.registerEvents(new BasicListener(), ActionLib.plugin);
     }
+
+    public static void registerActions() {
+        Package.getPackage("me.sraldeano.actionlib.action");
+    }
 }

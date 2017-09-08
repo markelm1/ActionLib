@@ -7,8 +7,11 @@ package me.sraldeano.actionlib;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -36,10 +39,18 @@ public class BasicListener implements Listener{
     }
     
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
+    public void onDeathOrKill(PlayerDeathEvent e) {
         if (e.getEntity().getKiller() instanceof Player) {
             return;
         }
+    }
+    @EventHandler
+    public void onFish(PlayerFishEvent e) {
+        
+    }
+    
+    @EventHandler
+    public void onTame(EntityTameEvent e) {
         
     }
 }
