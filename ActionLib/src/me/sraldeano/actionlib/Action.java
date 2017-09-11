@@ -32,10 +32,6 @@ public abstract class Action {
         this.player = player;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setSettings(Map<String, Object> settings) {
         this.settings = settings;
     }

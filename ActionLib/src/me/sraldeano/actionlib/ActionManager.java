@@ -5,8 +5,16 @@
  */
 package me.sraldeano.actionlib;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import me.sraldeano.actionlib.util.ReflectionUtil;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -33,7 +41,18 @@ public class ActionManager {
     public static void sendAction(Player player, ConfigurationSection settings) {
     }
     
-    public static void sendActions(Player player, String settings) {
+    public static void sendAction(Player player, String actionName, ConfigurationSection settings) {
+        Action action = null;
+        try {
+            action = ActionLib.getActionClass(actionName).newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ActionManager.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        sendAction(player, action, settings.getValues(false), null);
+    }
+    
+    public static void sendActions(Player player, Configuration config, String path) {
         
     }
     
@@ -47,9 +66,60 @@ public class ActionManager {
         if (asAddon) {
             ActionLib.addonActions.add(action);
         }
-        else {
-            ActionLib.actions.add(action);
-        }
+        ActionLib.actions.add(action);
         ActionLib.actionMap.put(action.getName(), action);
+        ActionLib.actionClassMap.put(action.getName(), action.getClass());
+    }
+    
+    public static List<Action> buildActions(Configuration config, String path, Player p) {
+        List<?> list = config.getList(path);
+        ArrayList<Action> actions = new ArrayList<>();
+        if (list == null) {
+            System.out.println("list is null");
+            return null;
+        }
+        for (Object key : list) {
+            Action action = null;
+            if (key instanceof String) {
+                String keyString = (String) key;
+                
+                if (keyString.startsWith("[") && keyString.endsWith("]") && !keyString.contains(" ")) {
+                    action = ActionLib.getAction(keyString.replace("[", "").replace("]", ""));
+                    actions.add(action);
+                }
+                else if (keyString.startsWith("[")) {
+                    String[] splited = keyString.split(" ", 2);
+                    String actionName = splited[0].replace("[", "").replace("]", "");
+                    System.out.println(actionName);
+                    action = ActionLib.getAction(actionName);
+                    Field[] fields = action.getClass().getFields();
+                    for (Field f : fields) {
+                        ReflectionUtil.setField(f, splited[1], action);
+                    }
+                    actions.add(action);
+                }
+                else if (keyString.startsWith("{")) {
+                    buildDefaultAction(keyString);
+                }
+            }
+            else if (key instanceof Map) {
+                Map map = (Map) key;
+                String actionStr = null;
+                for (String k : (Set<String>)map.keySet()) {
+                    actionStr = k.replace("[", "").replace("]", "");
+                }
+                System.out.println(actionStr);
+                action = ActionLib.getAction(actionStr);
+            }
+            
+            action.setPlayer(p);
+        }
+        return actions;
+    }
+    
+    public static Action buildDefaultAction(String name) {
+        name = name.replace("{", "").replace("}", "");
+        return ActionLib.getAction(name);
+        
     }
 }

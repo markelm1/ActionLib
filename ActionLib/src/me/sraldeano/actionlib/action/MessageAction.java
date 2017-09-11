@@ -8,13 +8,15 @@ import me.sraldeano.actionlib.Action;
  */
 public class MessageAction extends Action {
 
+    public String message = "Default Message";
+    
     public MessageAction() {
         super("Message");
     }
 
     @Override
     public void onExecute() {
-        getPlayer().sendMessage("Hijoeputa");
+        getPlayer().sendMessage(message);
     }
     
 }

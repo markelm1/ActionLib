@@ -8,9 +8,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.sraldeano.actionlib.util.AddonUtil;
+import me.sraldeano.actionlib.util.LoadUtil;
 import me.sraldeano.actionlib.util.ReflectionUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,6 +17,7 @@ public class ActionLib extends JavaPlugin{
     protected static List<Action> addonActions = new ArrayList<>();
     protected static List<Action> actions = new ArrayList<>();
     protected static Map<String, Action> actionMap = new HashMap<>();
+    protected static Map<String, Class<? extends Action>> actionClassMap = new HashMap<>();
     public static ActionLib plugin;
     
     @Override
@@ -35,13 +35,14 @@ public class ActionLib extends JavaPlugin{
             }
             ActionManager.registerAction(action, false);
         }
+        new AddonUtil().loadAddons();
         getServer().getLogger().info("ActionLib was loaded successfully.");
-        actions.addAll(addonActions);
         for (Action a : actions) {
             getLogger().severe("- " + a.getName());
         }
         getServer().getPluginCommand("actionlib").setExecutor(new CommandManager());
         saveDefaultConfig();
+        LoadUtil.registerEvents();
     }
 
     @Override
@@ -66,6 +67,16 @@ public class ActionLib extends JavaPlugin{
     }
     
     public static Action getAction(String action) {
-        return actionMap.get(action);
+        try {
+            return actionClassMap.get(action).newInstance();
+        } catch (InstantiationException | IllegalAccessException | NullPointerException ex) {
+            Logger.getLogger(ActionLib.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
+            return null;
+        }
+    }
+    
+    public static Class<? extends Action> getActionClass(String actionName) {
+        return actionMap.get(actionName).getClass();
     }
 }

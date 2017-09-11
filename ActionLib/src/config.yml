@@ -1,1 +1,11 @@
 config-working: true
+events:
+    death:
+        action: CancellEvent
+actions:
+   KillPlayer:
+        - '[Kill]'
+        - '[Message] You died by mistycal powers.'
+        - '[Give]':
+          item-type: 1
+          name: "Congrats"
