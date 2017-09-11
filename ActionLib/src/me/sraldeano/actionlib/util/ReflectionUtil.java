@@ -73,7 +73,8 @@ public class ReflectionUtil {
                 } catch (Exception ex) {
 
                 }
-            } else if (fieldType.isInstance(Map.class)) {
+            } else if (fieldType.isAssignableFrom(Map.class)) {
+                System.out.println("Is a map!  :D");
                 field.set(action, object);
             }
         

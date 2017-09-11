@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.sraldeano.actionlib;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,17 +95,49 @@ public class ActionManager {
                     actions.add(action);
                 }
                 else if (keyString.startsWith("{")) {
-                    buildDefaultAction(keyString);
+                    actions.add(buildDefaultAction(keyString));
                 }
             }
             else if (key instanceof Map) {
                 Map map = (Map) key;
                 String actionStr = null;
+                Map secondMap = null;
                 for (String k : (Set<String>)map.keySet()) {
                     actionStr = k.replace("[", "").replace("]", "");
                 }
-                System.out.println(actionStr);
+                System.out.println("actionstr: " + actionStr);
                 action = ActionLib.getAction(actionStr);
+                
+                                        
+                for (Object o : ((LinkedHashMap<?, ?>) map).values()) {
+                    secondMap = (Map) o;
+                    System.out.println(o);
+                    if (action instanceof MapSettingsAction) {
+                        try {
+                        //Send hashmap values (type and amount)
+                        ReflectionUtil.setField(action.getClass().getField("settings"), o, action);
+                        } catch (NoSuchFieldException | SecurityException ex) {
+                            Logger.getLogger(ActionManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    else {
+                        for (Field f : action.getClass().getFields()) {
+                            try {
+                                f.set(action, secondMap.get(f.getName()));
+                            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                                Logger.getLogger(ActionManager.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                    }
+                }
+                                        
+//                    try {
+//                        ReflectionUtil.setField(action.getClass().getField("settings"), secondMap, action);
+//                    } catch (NoSuchFieldException | SecurityException ex) {
+//                        Logger.getLogger(ActionManager.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                actions.add(action);
             }
             
             action.setPlayer(p);

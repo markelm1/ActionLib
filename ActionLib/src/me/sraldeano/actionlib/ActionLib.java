@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import me.sraldeano.actionlib.util.AddonUtil;
 import me.sraldeano.actionlib.util.LoadUtil;
 import me.sraldeano.actionlib.util.ReflectionUtil;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ActionLib extends JavaPlugin{
@@ -19,6 +21,7 @@ public class ActionLib extends JavaPlugin{
     protected static Map<String, Action> actionMap = new HashMap<>();
     protected static Map<String, Class<? extends Action>> actionClassMap = new HashMap<>();
     public static ActionLib plugin;
+    public Economy eco = null;
     
     @Override
     public void onEnable() {
@@ -43,6 +46,9 @@ public class ActionLib extends JavaPlugin{
         getServer().getPluginCommand("actionlib").setExecutor(new CommandManager());
         saveDefaultConfig();
         LoadUtil.registerEvents();
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            setupVault();
+        }
     }
 
     @Override
@@ -78,5 +84,14 @@ public class ActionLib extends JavaPlugin{
     
     public static Class<? extends Action> getActionClass(String actionName) {
         return actionMap.get(actionName).getClass();
+    }
+    
+    public boolean setupVault() {
+        RegisteredServiceProvider<Economy> economyProvider = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            eco = economyProvider.getProvider();
+        }
+
+        return (eco != null);
     }
 }

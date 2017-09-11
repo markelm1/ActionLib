@@ -1,6 +1,7 @@
 package me.sraldeano.actionlib;
 
 import java.util.Map;
+import me.sraldeano.actionlib.util.TextUtil;
 import org.bukkit.entity.Player;
 
 /**
@@ -13,9 +14,18 @@ public abstract class Action {
     private Player player;
     private Map<String, Object> settings;
     private Map<String, Object> variables;
+    private String[] needVariables;
+
+    public Action() {
+    }
     
     public Action(String name) {
         this.name = name;
+    }
+    
+    public Action(String name, String... needVariables) {
+        this.name = name;
+        this.needVariables = needVariables;
     }
     
     public final String getName() {
@@ -53,5 +63,20 @@ public abstract class Action {
         player = null;
         settings = null;
         variables = null;
+    }
+    public String replaceText(String text) {
+        text = TextUtil.colored(text);
+        for (String key : getVariables().keySet()) {
+            text = text.replace(key, (String) getVariables().get(key));
+        }
+        return text;
+    }
+    
+    public final void execute() {
+        
+    }
+    
+    public void setPlaceholders(Map<String, String> placeholders) {
+        
     }
 }

@@ -9,6 +9,7 @@ import me.sraldeano.actionlib.Action;
 public class MessageAction extends Action {
 
     public String message = "Default Message";
+    public String message2 = "dee";
     
     public MessageAction() {
         super("Message");
@@ -17,6 +18,7 @@ public class MessageAction extends Action {
     @Override
     public void onExecute() {
         getPlayer().sendMessage(message);
+        getPlayer().sendMessage(message2);
     }
     
 }
