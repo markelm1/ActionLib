@@ -1,6 +1,8 @@
 package me.sraldeano.actionlib.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import me.sraldeano.actionlib.ActionLib;
 import org.bukkit.ChatColor;
@@ -15,6 +17,14 @@ public class TextUtil {
 
     public static String colored(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+    
+    public static String[] colored(String[] text) {
+        List<String> newText = new ArrayList<>();
+        for (String t : text) {
+            newText.add(colored(t));
+        }
+        return (String[]) newText.toArray(text);
     }
     
     public static Map<String, String> getPlayerVariables(Player player) {

@@ -35,12 +35,9 @@ public abstract class Action {
     
     public abstract void onExecute();
     
+    
     public Player getPlayer() {
         return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     public void setSettings(Map<String, Object> settings) {
@@ -74,12 +71,15 @@ public abstract class Action {
         return text;
     }
     
-    public final void execute() {
-        for (String var : getRequiredVariables()) {
-            if (!getVariables().containsKey(var)) {
-                return;
+    public final void execute(Player player) {
+        if (requiredVariables != null) {
+            for (String var : getRequiredVariables()) {
+                if (!getVariables().containsKey(var)) {
+                    return;
+                }
             }
         }
+        this.player = player;
         onExecute();
     }
     

@@ -56,7 +56,6 @@ public class ActionManagerBuilder {
     }
     
     public Action build() {
-        action.setPlayer(player);
         if (settings != null) {
             action.setSettings(settings);
         }
@@ -67,6 +66,6 @@ public class ActionManagerBuilder {
     }
     
     public void send() {
-        build().onExecute();
+        build().execute(player);
     }
 }

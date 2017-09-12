@@ -27,10 +27,9 @@ public class ActionManager {
      * @param variables variables are needed on some Actions. In the 'Effect' action, you need to add a location variable
      */
     public static void sendAction(Player player, Action action, Map<String, Object> settings, HashMap<String, Object> variables) {
-        action.setPlayer(player);
         action.setSettings(settings);
         action.setVariables(variables);
-        action.onExecute();
+        action.execute(player);
         action.reset();
     }
     
@@ -139,8 +138,6 @@ public class ActionManager {
 //                    }
                 actions.add(action);
             }
-            
-            action.setPlayer(p);
         }
         return actions;
     }
