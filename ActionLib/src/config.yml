@@ -1,7 +1,8 @@
 config-working: true
 events:
-    death:
-        action: CancellEvent
+    join:
+        - "[Message] welcome"
+        - "[Give]" :
 actions:
    KillPlayer:
         - '[Kill]'
