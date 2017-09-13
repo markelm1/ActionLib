@@ -25,6 +25,9 @@ public class AddonUtil {
     
     public AddonUtil() {
         folder = new File(ActionLib.plugin.getDataFolder(), "addons");
+        if (folder == null) {
+            folder.mkdirs();
+        }
         ActionLib.testMsg(folder);
     }
     

@@ -71,11 +71,11 @@ public class BasicListener implements Listener{
         }
         variables.put("event", event);
         System.out.println("events." + eventConfig);
-        actions = ActionManager.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig, player);
+        actions = ActionManager.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
         if (actions != null) {
             for (Action a : actions) {
                 a.setVariables(variables);
-                a.onExecute();
+                a.execute(player);
             }
         }
 //        variables.put("event", event);

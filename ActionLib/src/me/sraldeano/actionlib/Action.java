@@ -1,5 +1,6 @@
 package me.sraldeano.actionlib;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import me.sraldeano.actionlib.util.TextUtil;
@@ -16,6 +17,7 @@ public abstract class Action {
     private Map<String, Object> settings;
     private Map<String, Object> variables;
     private String[] requiredVariables;
+    private Map<String, Object> placeholders = new HashMap<>();
 
     public Action() {
     }
@@ -64,7 +66,7 @@ public abstract class Action {
     }
     public String replaceText(String text) {
         text = TextUtil.colored(text);
-        for (String key : getVariables().keySet()) {
+        for (String key : placeholders.keySet()) {
             text = text.replace(key, (String) getVariables().get(key));
         }
         

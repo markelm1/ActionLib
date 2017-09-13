@@ -73,7 +73,12 @@ public class ActionLib extends JavaPlugin{
     }
     
     public static Action getAction(String action) {
-        return actionMap.get(action);
+        try {
+            return actionClassMap.get(action).newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     public static Class<? extends Action> getActionClass(String actionName) {

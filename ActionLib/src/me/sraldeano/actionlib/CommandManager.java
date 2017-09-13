@@ -25,39 +25,23 @@ public class CommandManager implements CommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String main, String[] args) {
-        if (args[0].equalsIgnoreCase("testaction")) {
-            Player p = (Player) cs;
-            ActionManager.sendAction(p, ActionLib.getAction(args[1]), new HashMap<String, Object>(), new HashMap<String, Object>());
-        }
-        if (args[0].equalsIgnoreCase("test")) {
-            cs.sendMessage(ActionLib.plugin.getConfig().getConfigurationSection("actions").getMapList("KillAction") + "");
-            for (Object x : ActionLib.plugin.getConfig().getConfigurationSection("actions").getList("KillPlayer")) {
-                cs.sendMessage(x + "");
-                cs.sendMessage(x.getClass().getName());
-                if (x instanceof LinkedHashMap<?, ?>) {
-                    System.out.println("fired");
-                    for (String k : (Set<String>)((Map) x).keySet()) {
-                        cs.sendMessage(k);
-                    }
-                    for (Object o : ((LinkedHashMap<?, ?>) x).values()) {
-                        cs.sendMessage(o + "");
-                        cs.sendMessage(o.getClass().getName());
-                        //Send hashmap values (type and amount)
-                        for (String k : (Set<String>) ((Map) o).keySet()) {
-                            cs.sendMessage(k);
-                        }
-                    }
-                }
+        switch (args[0].toLowerCase()) {
+            case "testaction" : {
+                Player p = (Player) cs;
+                ActionManager.sendAction(p, ActionLib.getAction(args[1]), new HashMap<String, Object>(), new HashMap<String, Object>());
             }
-        }
-        if (args[0].equalsIgnoreCase("about")) {
-            String[] about = {"&6&m--------------&r&6[]&6&m---------------",
-            "&6Created by: &3Sr_Aldeano",
-            "&6Version: &3" + ActionLib.plugin.getDescription().getVersion(),
-            "&6GitHub: &3github.com/Markelm16/ActionLib",
-            "&6&m--------------&r&6[]&6&m---------------"
-            };
-            cs.sendMessage(TextUtil.colored(about));
+            case "about" : {
+                String[] about = {"&6&m--------------&r&6[]&6&m---------------",
+                "&6Created by: &3Sr_Aldeano",
+                "&6Version: &3" + ActionLib.plugin.getDescription().getVersion(),
+                "&6GitHub: &3github.com/Markelm16/ActionLib",
+                "&6&m--------------&r&6[]&6&m---------------"
+                };
+                cs.sendMessage(TextUtil.colored(about));
+            }
+            case "reload" : {
+                ActionLib.plugin.reloadConfig();
+            }
         }
         return true;
     }

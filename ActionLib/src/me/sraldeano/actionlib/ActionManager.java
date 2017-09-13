@@ -29,7 +29,7 @@ public class ActionManager {
     public static void sendAction(Player player, Action action, Map<String, Object> settings, HashMap<String, Object> variables) {
         action.setSettings(settings);
         action.setVariables(variables);
-        action.onExecute();
+        action.execute(player);
         action.reset();
     }
     
@@ -57,6 +57,7 @@ public class ActionManager {
      * @param action Action to be registered
      * @param asAddon true if you want to register the Action as external addon
      */
+    @Deprecated
     public static void registerAction(Action action, boolean asAddon) {
         if (asAddon) {
             ActionLib.addonActions.add(action);
@@ -66,7 +67,7 @@ public class ActionManager {
         ActionLib.actionClassMap.put(action.getName(), action.getClass());
     }
     
-    public static List<Action> buildActions(Configuration config, String path, Player p) {
+    public static List<Action> buildActions(Configuration config, String path) {
         List<?> list = config.getList(path);
         ArrayList<Action> actions = new ArrayList<>();
         if (list == null) {
@@ -94,7 +95,7 @@ public class ActionManager {
                     actions.add(action);
                 }
                 else if (keyString.startsWith("{")) {
-                    actions.add(buildDefaultAction(keyString));
+                    actions.addAll(buildDefaultAction(keyString));
                 }
             }
             else if (key instanceof Map) {
@@ -142,9 +143,10 @@ public class ActionManager {
         return actions;
     }
     
-    public static Action buildDefaultAction(String name) {
+    public static List<Action> buildDefaultAction(String name) {
+        List<Action> list = null;
         name = name.replace("{", "").replace("}", "");
-        return ActionLib.getAction(name);
-        
+        list = buildActions(ActionLib.plugin.getConfig(), "actions." + name);
+        return list;
     }
 }
