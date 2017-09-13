@@ -29,7 +29,7 @@ public class ActionManager {
     public static void sendAction(Player player, Action action, Map<String, Object> settings, HashMap<String, Object> variables) {
         action.setSettings(settings);
         action.setVariables(variables);
-        action.execute(player);
+        action.onExecute();
         action.reset();
     }
     

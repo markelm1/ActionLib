@@ -10,8 +10,9 @@ import org.bukkit.event.Event;
  */
 public class CancellEventAction extends Action{
 
+
     public CancellEventAction() {
-        super("CancellEvent");
+        super("CancellEvent", "event");
     }
 
     @Override

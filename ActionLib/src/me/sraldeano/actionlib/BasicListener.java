@@ -75,7 +75,7 @@ public class BasicListener implements Listener{
         if (actions != null) {
             for (Action a : actions) {
                 a.setVariables(variables);
-                a.execute(player);
+                a.onExecute();
             }
         }
 //        variables.put("event", event);
