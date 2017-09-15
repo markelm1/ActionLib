@@ -1,8 +1,8 @@
-author: SrAldeano
+author: "SrAldeano"
 version: "1.0"
 description: "testdesc"
 main: "me.sraldeano.actionlib.ActionLib"
 name: "ActionLib"
 commands:
     actionlib:
-        description: ActionLib main command.
+        description: "ActionLib main command."

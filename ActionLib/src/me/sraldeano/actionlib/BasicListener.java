@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -63,6 +64,11 @@ public class BasicListener implements Listener{
         map.put("entity", e.getEntity());
         sendEvent((Player) e.getOwner(), e, "tame", map);
     }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent e) {
+        sendEvent(e.getPlayer(), e, "chat", null);
+    }
     
     public static void sendEvent(Player player, Event event, String eventConfig, Map<String, Object> variables) {
         List<Action> actions;
@@ -78,10 +84,5 @@ public class BasicListener implements Listener{
                 a.execute(player);
             }
         }
-//        variables.put("event", event);
-//        if (player.hasPermission(ActionLib.plugin.getConfig().getString("events." + eventConfig + ".permission"))) {
-//            String configAction = ActionLib.plugin.getConfig().getString("events." + eventConfig + ".action");
-//            new ActionManagerBuilder(player).setAction(configAction).setVariables(variables).send();
-//        }
     }
 }

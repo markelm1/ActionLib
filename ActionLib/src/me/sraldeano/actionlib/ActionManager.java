@@ -33,9 +33,6 @@ public class ActionManager {
         action.reset();
     }
     
-    public static void sendAction(Player player, ConfigurationSection settings) {
-    }
-    
     public static void sendAction(Player player, String actionName, ConfigurationSection settings) {
         Action action = null;
         try {

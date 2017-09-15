@@ -3,11 +3,13 @@ package me.sraldeano.actionlib;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import me.sraldeano.actionlib.util.ActionExeption;
 import me.sraldeano.actionlib.util.TextUtil;
 import org.bukkit.entity.Player;
 
 /**
- *
+ * Object that represents an Action
  * @author SrAldeano
  */
 public abstract class Action {
@@ -19,8 +21,6 @@ public abstract class Action {
     private String[] requiredVariables;
     private Map<String, Object> placeholders = new HashMap<>();
 
-    public Action() {
-    }
     
     public Action(String name) {
         this.name = name;
@@ -34,10 +34,13 @@ public abstract class Action {
     public final String getName() {
         return name;
     }
-    
+
+    /**
+     * Required on creating a custom Action
+     * This will be fired when the action is executed
+     */
     public abstract void onExecute();
-    
-    
+
     public Player getPlayer() {
         return player;
     }
@@ -64,15 +67,30 @@ public abstract class Action {
         settings = null;
         variables = null;
     }
+
+    /**
+     * Color a text and replace all variables.
+     * @param text to replace
+     * @return the text but it is colored and all Placeholders has their values
+     */
     public String replaceText(String text) {
+        placeholders.putAll(TextUtil.getPlayerVariables(getPlayer()));
+
         text = TextUtil.colored(text);
-        for (String key : placeholders.keySet()) {
-            text = text.replace(key, (String) getVariables().get(key));
+        if (text.contains("%")) {
+            for (String key : placeholders.keySet()) {
+                text = text.replace(key, (String) getPlaceholders().get(key));
+            }
         }
         
         return text;
     }
-    
+
+    /**
+     * Execute this upgrade to a player
+     * @param player the player to execute
+     */
+
     public final void execute(Player player) {
         if (requiredVariables != null) {
             for (String var : getRequiredVariables()) {
@@ -83,13 +101,18 @@ public abstract class Action {
         }
         this.player = player;
         onExecute();
+        this.player = null;
     }
     
     public void setPlaceholders(Map<String, String> placeholders) {
-        
+        this.placeholders.putAll(placeholders);
     }
     
     public String[] getRequiredVariables() {
         return requiredVariables;
+    }
+
+    public Map<String, Object> getPlaceholders() {
+        return placeholders;
     }
 }

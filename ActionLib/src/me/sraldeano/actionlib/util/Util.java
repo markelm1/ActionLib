@@ -2,6 +2,9 @@ package me.sraldeano.actionlib.util;
 
 import java.util.Map;
 import me.sraldeano.actionlib.ActionLib;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -23,5 +26,18 @@ public class Util {
     
     public static boolean isUsingVault() {
         return ActionLib.plugin.getServer().getPluginManager().getPlugin("Vault") != null;
+    }
+
+    public static Location locationBuilder(String loc) {
+        loc = loc.replace(" ", "");
+        String[] splits = loc.split(",");
+        World world = Bukkit.getWorld(splits[0]);
+        double x, y, z;
+        x = Double.valueOf(splits[1]);
+        y = Double.valueOf(splits[2]);
+        z = Double.valueOf(splits[3]);
+        Location location = new Location(world, x, y, z);
+        return location;
+
     }
 }
