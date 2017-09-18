@@ -1,8 +1,6 @@
 package me.sraldeano.actionlib.util;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -10,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.sraldeano.actionlib.Action;
 import me.sraldeano.actionlib.ActionLib;
-import me.sraldeano.actionlib.ActionManager;
+import me.sraldeano.actionlib.ActionManagerOld;
 
 /**
  *
@@ -41,7 +39,7 @@ public class AddonLoader {
             actionClass = javaClass.asSubclass(Action.class);
 //            Constructor constructor = actionLibClass.getConstructor();
             this.action =  actionClass.newInstance();
-            ActionManager.registerAction(action, true);
+            ActionManagerOld.registerAction(action, true);
         } catch (ClassCastException | IllegalAccessException | InstantiationException ex) {
             Logger.getLogger(AddonLoader.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,10 +1,8 @@
 package me.sraldeano.actionlib;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import me.sraldeano.actionlib.util.ActionExeption;
 import me.sraldeano.actionlib.util.TextUtil;
 import org.bukkit.entity.Player;
 
@@ -74,7 +72,9 @@ public abstract class Action {
      * @return the text but it is colored and all Placeholders has their values
      */
     public String replaceText(String text) {
-        placeholders.putAll(TextUtil.getPlayerVariables(getPlayer()));
+        if (!placeholders.containsKey("%player%")) {
+            placeholders.putAll(TextUtil.getPlayerVariables(getPlayer()));
+        }
 
         text = TextUtil.colored(text);
         if (text.contains("%")) {
@@ -104,7 +104,7 @@ public abstract class Action {
         this.player = null;
     }
     
-    public void setPlaceholders(Map<String, String> placeholders) {
+    public void addPlaceholders(Map<String, String> placeholders) {
         this.placeholders.putAll(placeholders);
     }
     

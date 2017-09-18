@@ -65,7 +65,7 @@ public class AddonUtil {
             String[] jarNameSplited = jar.getName().split("/");
             String jarName = jarNameSplited[jarNameSplited.length - 1];
             
-            return new AddonLoader(AddonUtil.class.getClassLoader(), description, new File(folder, jarName), dataFolder).getAction();
+            return new AddonLoader(description, new File(folder, jarName), dataFolder).getAction();
         } catch (MalformedURLException | ClassNotFoundException ex) {
             Logger.getLogger(AddonUtil.class.getName()).log(Level.SEVERE, null, ex);
             return null;

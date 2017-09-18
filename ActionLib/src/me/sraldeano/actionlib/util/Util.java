@@ -1,10 +1,14 @@
 package me.sraldeano.actionlib.util;
 
 import java.util.Map;
+import java.util.logging.Logger;
+
 import me.sraldeano.actionlib.ActionLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -38,6 +42,17 @@ public class Util {
         z = Double.valueOf(splits[3]);
         Location location = new Location(world, x, y, z);
         return location;
+    }
 
+    public static MemorySection mapToMemorySection(Map<String, Object> map) {
+        MemorySection sect = new MemoryConfiguration();
+        for (String key : map.keySet()) {
+            sect.set(key, map.get(key));
+        }
+        return sect;
+    }
+
+    public static Logger getLogger() {
+        return ActionLib.plugin.getLogger();
     }
 }

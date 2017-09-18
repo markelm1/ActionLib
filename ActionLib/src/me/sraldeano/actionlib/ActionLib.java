@@ -36,7 +36,7 @@ public class ActionLib extends JavaPlugin{
                 Logger.getLogger(ActionLib.class.getName()).log(Level.SEVERE, null, ex);
                 getLogger().warning("Noooo actions error");
             }
-            ActionManager.registerAction(action, false);
+            ActionManagerOld.registerAction(action, false);
         }
         new AddonUtil().loadAddons();
         getServer().getLogger().info("ActionLib was loaded successfully.");

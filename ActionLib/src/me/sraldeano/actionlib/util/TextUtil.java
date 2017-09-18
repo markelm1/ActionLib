@@ -115,4 +115,12 @@ public class TextUtil {
             }
         }
     }
+
+    public static List<Color> getRGBColors(List<String> list) {
+        List<Color> colorList= new ArrayList<>();
+        for (String color : list) {
+            colorList.add(getRGBColor(color));
+        }
+        return colorList;
+    }
 }

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="bukkit-latest-shaded">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Deskargak/Bedwars/bukkit-latest-shaded.jar!/" />
-      <root url="jar://$USER_HOME$/Mahaigaina/Vault.jar!/" />
+      <root url="jar://$USER_HOME$/Mahaigaina/Servidores/ctf/plugins/Vault.jar!/" />
+      <root url="jar://$USER_HOME$/Deskargak/Lobby/bukkit-1.12.1-R0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

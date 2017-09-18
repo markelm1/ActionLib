@@ -17,7 +17,6 @@ import org.yaml.snakeyaml.Yaml;
  * @author markelm
  */
 public class AddonDescription {
-    private Yaml yaml;
     
     private String main, name, description, author, version;
 

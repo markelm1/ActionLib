@@ -5,6 +5,8 @@ import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
@@ -17,6 +19,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ItemUtil {
@@ -107,7 +110,7 @@ public class ItemUtil {
         if (item.getType().name().startsWith("LEATHER_")) {
             LeatherArmorMeta aM = (LeatherArmorMeta) item.getItemMeta();
             if (section.isSet("color")) {
-                aM.setColor(TextUtil.getRGBColor(section.getRoot(), section.getCurrentPath() + ".color"));
+                aM.setColor(TextUtil.getRGBColor(section.getString("color")));
             }
             item.setItemMeta(aM);
         }
@@ -127,7 +130,7 @@ public class ItemUtil {
             }
             else {
                 try {
-                    pM.setColor(TextUtils.getRGBColor(section.getConfigurationSection("color")));
+                    pM.setColor(TextUtil.getRGBColor(section.getString("color")));
                     pM.setBasePotionData(new PotionData(PotionType.valueOf(section.getString("potion", "JUMP"))));
                 }catch (Exception e) {}
             }
@@ -172,6 +175,11 @@ public class ItemUtil {
         return item;
     }
 
+    public static ItemStack itemConstructor(Map<String, Object> map) {
+        MemorySection sect = Util.mapToMemorySection(map);
+        return itemConstructor(sect);
+    }
+
     public static FireworkMeta fireworkMetaConstructor(ItemStack item, ConfigurationSection section) {
         FireworkMeta fM = (FireworkMeta) item.getItemMeta();
         fM.setPower(section.getInt("power"));
@@ -189,11 +197,11 @@ public class ItemUtil {
             }
 
             if (s.isSet("colors")){
-                colors.addAll(TextUtil.getRGBColors(section.getRoot(), s.getCurrentPath() + ".colors"));
+                colors.addAll(TextUtil.getRGBColors(s.getStringList("colors")));
 
             }
             if (s.isSet("fade-colors")) {
-                fadeColors.addAll(TextUtil.getRGBColors(section.getRoot(), s.getCurrentPath() + ".fade-colors"));
+                fadeColors.addAll(TextUtil.getRGBColors(s.getStringList("colors")));
 
             }
 

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import me.sraldeano.actionlib.Action;
 import me.sraldeano.actionlib.MapSettingsAction;
+import me.sraldeano.actionlib.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,10 +23,7 @@ public class GiveAction extends Action implements MapSettingsAction{
     @Override
     public void onExecute() {
         System.out.println("Settings: " + settings);
-        Material type = Material.getMaterial(((String) settings.get("type")).toUpperCase());
-        System.out.println("material name: " + type.name());
-        ItemStack is = new ItemStack(type);
-        is.setAmount((Integer) settings.get("amount"));
+        ItemStack is = ItemUtil.itemConstructor(settings);
         getPlayer().getInventory().addItem(is);
     }
     

@@ -11,6 +11,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import me.sraldeano.actionlib.Action;
 import me.sraldeano.actionlib.ActionLib;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.util.NumberConversions;
@@ -82,5 +83,9 @@ public class ReflectionUtil {
             
         }
 
+    }
+
+    public static String getVersion() {
+        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
     }
 }

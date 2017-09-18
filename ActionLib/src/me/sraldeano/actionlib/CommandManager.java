@@ -6,13 +6,8 @@
 package me.sraldeano.actionlib;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import me.sraldeano.actionlib.ActionLib;
-import me.sraldeano.actionlib.ActionManager;
+
 import me.sraldeano.actionlib.util.TextUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,7 +23,7 @@ public class CommandManager implements CommandExecutor{
         switch (args[0].toLowerCase()) {
             case "testaction" : {
                 Player p = (Player) cs;
-                ActionManager.sendAction(p, ActionLib.getAction(args[1]), new HashMap<String, Object>(), new HashMap<String, Object>());
+                ActionManagerOld.sendAction(p, ActionLib.getAction(args[1]), new HashMap<String, Object>(), new HashMap<String, Object>());
             }
             case "about" : {
                 String[] about = {"&6&m--------------&r&6[]&6&m---------------",

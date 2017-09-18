@@ -24,6 +24,10 @@ public class BasicListener implements Listener{
     
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        if (!e.getPlayer().hasPlayedBefore()) {
+            sendEvent(e.getPlayer(), e, "first-join", null);
+            return;
+        }
         sendEvent(e.getPlayer(), e, "join", null);
     }
     
@@ -77,7 +81,7 @@ public class BasicListener implements Listener{
         }
         variables.put("event", event);
         System.out.println("events." + eventConfig);
-        actions = ActionManager.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
+        actions = ActionManagerOld.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
         if (actions != null) {
             for (Action a : actions) {
                 a.setVariables(variables);
