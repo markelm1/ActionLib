@@ -81,7 +81,7 @@ public class BasicListener implements Listener{
         }
         variables.put("event", event);
         System.out.println("events." + eventConfig);
-        actions = ActionManagerOld.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
+        actions = ActionManager.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
         if (actions != null) {
             for (Action a : actions) {
                 a.setVariables(variables);

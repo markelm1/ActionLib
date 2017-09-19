@@ -17,7 +17,6 @@ public abstract class Action {
     private Map<String, Object> settings;
     private Map<String, Object> variables;
     private String[] requiredVariables;
-    private Map<String, Object> placeholders = new HashMap<>();
 
     
     public Action(String name) {
@@ -72,14 +71,11 @@ public abstract class Action {
      * @return the text but it is colored and all Placeholders has their values
      */
     public String replaceText(String text) {
-        if (!placeholders.containsKey("%player%")) {
-            placeholders.putAll(TextUtil.getPlayerVariables(getPlayer()));
-        }
-
+        Map<String, String> placeholders = TextUtil.getPlayerVariables(getPlayer());
         text = TextUtil.colored(text);
         if (text.contains("%")) {
             for (String key : placeholders.keySet()) {
-                text = text.replace(key, (String) getPlaceholders().get(key));
+                text = text.replace(key, (String) placeholders.get(key));
             }
         }
         
@@ -104,15 +100,7 @@ public abstract class Action {
         this.player = null;
     }
     
-    public void addPlaceholders(Map<String, String> placeholders) {
-        this.placeholders.putAll(placeholders);
-    }
-    
     public String[] getRequiredVariables() {
         return requiredVariables;
-    }
-
-    public Map<String, Object> getPlaceholders() {
-        return placeholders;
     }
 }
