@@ -42,14 +42,6 @@ public abstract class Action {
         return player;
     }
 
-    public void setSettings(Map<String, Object> settings) {
-        this.settings = settings;
-    }
-
-    public Map<String, Object> getSettings() {
-        return settings;
-    }
-
     public Map<String, Object> getVariables() {
         return variables;
     }

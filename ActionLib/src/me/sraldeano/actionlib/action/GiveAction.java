@@ -22,7 +22,6 @@ public class GiveAction extends Action implements MapSettingsAction{
 
     @Override
     public void onExecute() {
-        System.out.println("Settings: " + settings);
         ItemStack is = ItemUtil.itemConstructor(settings);
         getPlayer().getInventory().addItem(is);
     }

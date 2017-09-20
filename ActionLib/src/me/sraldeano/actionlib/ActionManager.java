@@ -10,6 +10,7 @@ import me.sraldeano.actionlib.util.Util;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  *
@@ -17,9 +18,10 @@ import org.bukkit.entity.Player;
  */
 public class ActionManager {
     
-    private Player[] player;
+    private Player[] players;
     private Action action;
     private Map<String, Object> settings;
+    private Object setting;
     private Map<String, Object> variables;
 
     /**
@@ -27,7 +29,11 @@ public class ActionManager {
      * @param player
      */
     public ActionManager(Player... player) {
-        this.player = player;
+        this.players = player;
+    }
+
+    public ActionManager() {
+
     }
 
     /**
@@ -35,7 +41,7 @@ public class ActionManager {
      * @param players
      */
     public ActionManager(List<Player> players) {
-        player = players.toArray(new Player[players.size()]);
+        this.players = players.toArray(new Player[players.size()]);
     }
     
     public ActionManager setAction(String actionName) {
@@ -66,15 +72,52 @@ public class ActionManager {
         this.settings = settings;
         return this;
     }
+
+    public ActionManager setSettings(Object setting) {
+        this.setting = setting;
+        return this;
+    }
     
     public ActionManager setVariables(Map<String, Object> variables) {
         this.variables = variables;
         return this;
     }
 
+    public ActionManager setPlayers(Player... players) {
+        this.players = players;
+        return this;
+    }
+
+    public ActionManager setPlayers(List<Player> players) {
+        this.players = players.toArray(new Player[players.size()]);
+        return this;
+    }
+
+    /**
+     * Build the final action.
+     * @return
+     */
     public Action build() {
         if (settings != null) {
-            action.setSettings(settings);
+            if (action instanceof MapSettingsAction) {
+                try {
+                    action.getClass().getField("settings").set(action, settings);
+                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                for (Field f : action.getClass().getFields()) {
+                    ReflectionUtil.setField(f, settings.get(f.getName()), action);
+                }
+            }
+        }
+        if (setting != null) {
+            try {
+                action.getClass().getFields()[0].set(action, setting);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         if (variables != null) {
             action.setVariables(variables);
@@ -83,7 +126,8 @@ public class ActionManager {
     }
     
     public void execute() {
-        for (Player p : player) {
+        if (players == null) {return;}
+        for (Player p : players) {
             build().execute(p);
         }
     }
@@ -94,13 +138,36 @@ public class ActionManager {
         }
     }
 
-    public static List<Action> buildActions(Configuration config, String path) {
+    public static List<Action> buildActions(Configuration config, String path, Map<String, Object> variables) {
         List<?> list = config.getList(path);
-        ArrayList<Action> actions = new ArrayList<>();
         if (list == null) {
             Util.getLogger().severe("Cannot found list '" + path + "' in the configuration: " + config.getName());
             return null;
         }
+        try {
+            return buildActions(list);
+        } catch (Exception e) {
+            Util.getLogger().severe("The list '" + path + "' in the configuration " + config.getName() + " contains has an error");
+        }
+        return null;
+    }
+
+    public static List<Action> buildActions(Configuration config, String path) {
+        return buildActions(config, path, null);
+    }
+
+    public static List<Action> buildActions(List<?> list) {
+        try {
+            return  buildActions(list, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<Action> buildActions(List<?> list, Map<String, Object> variables) throws Exception{
+
+        ArrayList<Action> actions = new ArrayList<>();
         for (Object key : list) {
             Action action = null;
             if (key instanceof String) {
@@ -112,17 +179,14 @@ public class ActionManager {
                 else if (keyString.startsWith("[")) {
                     String[] splited = keyString.split(" ", 2);
                     String actionName = splited[0].replace("[", "").replace("]", "");
-                    System.out.println(actionName);
-                    action = ActionLib.getAction(actionName);
-                    Field[] fields = action.getClass().getFields();
-                    ReflectionUtil.setField(fields[0], splited[1], action);
+                    action = new ActionManager().setAction(actionName).setSettings(keyString.replace(splited[0], "")).build();
                     actions.add(action);
                 }
                 else if (keyString.startsWith("{")) {
                     actions.addAll(buildDefaultAction(keyString));
                 }
                 else {
-                    Util.getLogger().severe("The list '" + path + "' in the configuration " + config.getName() + " contains a not valid format string '" + keyString + "'");
+                    throw new YAMLException("The formatting of the String is erroneous");
                 }
             }
             else if (key instanceof Map) {
@@ -137,10 +201,9 @@ public class ActionManager {
                     secondMap = (Map) o;
                     if (action instanceof MapSettingsAction) {
                         try {
-                            //Send hashmap values (type and amount)
                             ReflectionUtil.setField(action.getClass().getField("settings"), o, action);
                         } catch (NoSuchFieldException | SecurityException ex) {
-                            Logger.getLogger(ActionManagerOld.class.getName()).log(Level.SEVERE, null, ex);
+                            ex.printStackTrace();
                         }
                     }
                     else {
@@ -148,16 +211,19 @@ public class ActionManager {
                             try {
                                 f.set(action, secondMap.get(f.getName()));
                             } catch (IllegalArgumentException | IllegalAccessException ex) {
-                                Logger.getLogger(ActionManagerOld.class.getName()).log(Level.SEVERE, null, ex);
+                                ex.printStackTrace();
                             }
                         }
 
                     }
                 }
+                if (variables != null) {
+                    action.setVariables(variables);
+                }
                 actions.add(action);
             }
             else {
-                Util.getLogger().severe("The list '" + path + "' in the configuration " + config.getName() + " contains a not valid value '" + key + "'");
+                throw new YAMLException("An unknown object was found in the list.");
             }
         }
         return actions;
@@ -168,6 +234,24 @@ public class ActionManager {
         name = name.replace("{", "").replace("}", "");
         list = buildActions(ActionLib.plugin.getConfig(), "actions." + name);
         return list;
+    }
+
+
+
+    /**
+     * Register your action to the plugin.
+     * You don't need to do this if the Action is loaded from the addons folder.
+     * @param action Action to be registered
+     * @param asAddon true if you want to register the Action as external addon
+     */
+    @Deprecated
+    public static void registerAction(Action action, boolean asAddon) {
+        if (asAddon) {
+            ActionLib.addonActions.add(action);
+        }
+        ActionLib.actions.add(action);
+        ActionLib.actionMap.put(action.getName(), action);
+        ActionLib.actionClassMap.put(action.getName(), action.getClass());
     }
 
 }

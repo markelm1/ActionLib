@@ -23,7 +23,11 @@ public class CommandManager implements CommandExecutor{
         switch (args[0].toLowerCase()) {
             case "testaction" : {
                 Player p = (Player) cs;
-                ActionManagerOld.sendAction(p, ActionLib.getAction(args[1]), new HashMap<String, Object>(), new HashMap<String, Object>());
+                String setting = null;
+                for (String arrayPart : args) {
+                    setting = setting + arrayPart;
+                }
+                new ActionManager((Player) cs).setSettings(args).setAction(args[1]);
             }
             case "about" : {
                 String[] about = {"&6&m--------------&r&6[]&6&m---------------",
