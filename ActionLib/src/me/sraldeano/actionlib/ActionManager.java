@@ -77,11 +77,6 @@ public class ActionManager {
         this.setting = setting;
         return this;
     }
-    
-    public ActionManager setVariables(Map<String, Object> variables) {
-        this.variables = variables;
-        return this;
-    }
 
     public ActionManager setPlayers(Player... players) {
         this.players = players;
@@ -113,14 +108,9 @@ public class ActionManager {
             }
         }
         if (setting != null) {
-            try {
-                action.getClass().getFields()[0].set(action, setting);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            if (action.getClass().getFields().length != 0) {
+                ReflectionUtil.setField(action.getClass().getFields()[0], setting, action);
             }
-        }
-        if (variables != null) {
-            action.setVariables(variables);
         }
         return action;
     }
@@ -128,6 +118,10 @@ public class ActionManager {
     public void execute() {
         if (players == null) {return;}
         for (Player p : players) {
+            if (variables != null) {
+                build().execute(p, variables);
+                return;
+            }
             build().execute(p);
         }
     }
@@ -138,7 +132,13 @@ public class ActionManager {
         }
     }
 
-    public static List<Action> buildActions(Configuration config, String path, Map<String, Object> variables) {
+    public static void sendActions(Player player, Configuration conf, String path, Map<String, Object> variables) {
+        for (Action action : buildActions(conf, path)) {
+            action.execute(player, variables);
+        }
+    }
+
+    public static List<Action> buildActions(Configuration config, String path) {
         List<?> list = config.getList(path);
         if (list == null) {
             Util.getLogger().severe("Cannot found list '" + path + "' in the configuration: " + config.getName());
@@ -152,20 +152,7 @@ public class ActionManager {
         return null;
     }
 
-    public static List<Action> buildActions(Configuration config, String path) {
-        return buildActions(config, path, null);
-    }
-
-    public static List<Action> buildActions(List<?> list) {
-        try {
-            return  buildActions(list, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static List<Action> buildActions(List<?> list, Map<String, Object> variables) throws Exception{
+    public static List<Action> buildActions(List<?> list){
 
         ArrayList<Action> actions = new ArrayList<>();
         for (Object key : list) {
@@ -185,9 +172,7 @@ public class ActionManager {
                 else if (keyString.startsWith("{")) {
                     actions.addAll(buildDefaultAction(keyString));
                 }
-                else {
-                    throw new YAMLException("The formatting of the String is erroneous");
-                }
+                else throw new YAMLException("The formatting of the String is erroneous");
             }
             else if (key instanceof Map) {
                 Map map = (Map) key;
@@ -217,9 +202,6 @@ public class ActionManager {
 
                     }
                 }
-                if (variables != null) {
-                    action.setVariables(variables);
-                }
                 actions.add(action);
             }
             else {
@@ -244,7 +226,6 @@ public class ActionManager {
      * @param action Action to be registered
      * @param asAddon true if you want to register the Action as external addon
      */
-    @Deprecated
     public static void registerAction(Action action, boolean asAddon) {
         if (asAddon) {
             ActionLib.addonActions.add(action);
@@ -253,5 +234,4 @@ public class ActionManager {
         ActionLib.actionMap.put(action.getName(), action);
         ActionLib.actionClassMap.put(action.getName(), action.getClass());
     }
-
 }

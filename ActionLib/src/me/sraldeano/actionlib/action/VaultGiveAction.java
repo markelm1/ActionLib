@@ -5,10 +5,10 @@ import me.sraldeano.actionlib.ActionLib;
 
 public class VaultGiveAction extends Action{
 
-    public int amount = 1;
+    public double amount = 1;
 
     public VaultGiveAction() {
-        super("VaultGiveAction");
+        super("VaultGive");
     }
 
     @Override

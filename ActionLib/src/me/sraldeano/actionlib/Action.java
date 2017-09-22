@@ -1,10 +1,9 @@
 package me.sraldeano.actionlib;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import me.sraldeano.actionlib.util.TextUtil;
 import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 /**
  * Object that represents an Action
@@ -14,7 +13,6 @@ public abstract class Action {
     
     private String name;
     private Player player;
-    private Map<String, Object> settings;
     private Map<String, Object> variables;
     private String[] requiredVariables;
 
@@ -46,17 +44,6 @@ public abstract class Action {
         return variables;
     }
 
-    public void setVariables(Map<String, Object> variables) {
-        this.variables = variables;
-    }
-    
-    public void reset() {
-        name = null;
-        player = null;
-        settings = null;
-        variables = null;
-    }
-
     /**
      * Color a text and replace all variables.
      * @param text to replace
@@ -70,7 +57,6 @@ public abstract class Action {
                 text = text.replace(key, (String) placeholders.get(key));
             }
         }
-        
         return text;
     }
 
@@ -83,13 +69,23 @@ public abstract class Action {
         if (requiredVariables != null) {
             for (String var : getRequiredVariables()) {
                 if (!getVariables().containsKey(var)) {
-                    return;
+                    try {
+                        throw new Exception("The action does not have the required variable '" + var + "'");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
         this.player = player;
         onExecute();
         this.player = null;
+    }
+
+    public final void execute(Player player, Map<String, Object> variables) {
+        this.variables = variables;
+        execute(player);
+        this.variables = null;
     }
     
     public String[] getRequiredVariables() {

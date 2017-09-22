@@ -5,9 +5,13 @@
  */
 package me.sraldeano.actionlib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import me.sraldeano.actionlib.util.TextUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,12 +26,21 @@ public class CommandManager implements CommandExecutor{
     public boolean onCommand(CommandSender cs, Command cmd, String main, String[] args) {
         switch (args[0].toLowerCase()) {
             case "testaction" : {
+                ActionManager actionManager = new ActionManager((Player) cs).setAction(args[1]);
+                ArrayList<String> argsList = new ArrayList<>(Arrays.asList(args));
+                argsList.remove(0);
+                argsList.remove(0);
                 Player p = (Player) cs;
-                String setting = null;
-                for (String arrayPart : args) {
-                    setting = setting + arrayPart;
+                String setting = "";
+                if (argsList.size() != 0) {
+                    for (String arrayPart : argsList) {
+                        setting = setting + arrayPart + " ";
+                    }
+                    setting.substring(0, setting.length() - 1);
+                    actionManager.setSettings(setting);
                 }
-                new ActionManager((Player) cs).setSettings(args).setAction(args[1]);
+                actionManager.execute();
+                break;
             }
             case "about" : {
                 String[] about = {"&6&m--------------&r&6[]&6&m---------------",
@@ -37,9 +50,23 @@ public class CommandManager implements CommandExecutor{
                 "&6&m--------------&r&6[]&6&m---------------"
                 };
                 cs.sendMessage(TextUtil.colored(about));
+                break;
             }
             case "reload" : {
                 ActionLib.plugin.reloadConfig();
+                break;
+            }
+            case "addons" : {
+                List<Action> actionList = ActionLib.getAddonActions();
+                if (actionList.size() < 1) {
+                    cs.sendMessage("Currently there are not addons loaded.");
+                    return true;
+                }
+                cs.sendMessage(ChatColor.GREEN + "Currently loaded addons:");
+                for (Action addon : ActionLib.getAddonActions()) {
+                    cs.sendMessage(ChatColor.AQUA + "- " + addon.getName());
+                }
+                break;
             }
         }
         return true;

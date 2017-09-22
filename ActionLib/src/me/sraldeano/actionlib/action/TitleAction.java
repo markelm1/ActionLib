@@ -5,7 +5,7 @@ import me.sraldeano.actionlib.util.TitleUtil;
 
 public class TitleAction extends Action {
 
-    public String title = "Default title", subtitle;
+    public String title = "Default title", subtitle = "";
     public int fadein = 10, fadeout = 10, stay = 30;
 
     public TitleAction() {
