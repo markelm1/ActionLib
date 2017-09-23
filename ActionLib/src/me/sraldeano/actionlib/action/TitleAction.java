@@ -14,6 +14,6 @@ public class TitleAction extends Action {
 
     @Override
     public void onExecute() {
-        TitleUtil.sendTitle(getPlayer(), title, subtitle, fadein, stay, fadeout);
+        TitleUtil.sendTitle(getPlayer(), replaceText(title), replaceText(subtitle), fadein, stay, fadeout);
     }
 }

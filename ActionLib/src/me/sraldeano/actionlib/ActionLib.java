@@ -56,10 +56,6 @@ public class ActionLib extends JavaPlugin{
         getServer().getLogger().fine("ActionLib was unloaded successfully.");
     }
     
-    public static void testMsg(Object msg) {
-        plugin.getLogger().info(msg + "");
-    }
-    
     public static void sendAction(Player receiver, Action action) {
         
     }

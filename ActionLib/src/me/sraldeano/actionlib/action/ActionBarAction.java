@@ -5,7 +5,7 @@ import me.sraldeano.actionlib.util.TitleUtil;
 
 public class ActionBarAction extends Action{
 
-    public String message = "Default ActionBar.";
+    public String message = "Default ActionBar message";
 
     public ActionBarAction() {
         super ("ActionBar");

@@ -1,14 +1,28 @@
-config-working: true
+#Welcome to ActionLib's config
+#More info at https://www.spigotmc.org/wiki/actionlib/
+#Developed by SrAldeano (MarkelM16)
 events:
+#   These actions will be fired when some of the event occur
+#   You can use the following events: join, kill, fish, first-join, tame, chat, first-join, leave, death and teleport.
     join:
-        - "[Message] welcome"
-        - "[Give]" :
+        - '[Message] Welcome again %player% to the server!'
+        - '[Give]' :
             type: STONE
             amount: 4
-        - "[Message] second message"
-        - "[ForceChat] I am forced to chat."
-        - "{KillPlayer}"
+    kill:
+        - '[VaultGive] 30'
+    fish:
+        - '[Broadcast] &6%player% catch a fish!'
+    first-join:
+        - '{Welcome}'
+
 actions:
+#  Create action-packs, send them using {YourPack}. *Names can be custom but not repeated
    KillPlayer:
         - '[Kill]'
         - '[Message] You died by mistycal powers.'
+   Welcome:
+        - '[Broadcast] &a&l%player% &bis new on the server!'
+        - '[Title]' :
+            title: '&6Welcome to our server'
+            subtitle: '&3Have a great time!'

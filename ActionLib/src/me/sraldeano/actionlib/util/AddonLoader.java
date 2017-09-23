@@ -19,8 +19,7 @@ public class AddonLoader {
     private Action action;
     
     public AddonLoader(AddonDescription description, File file, File dataFolder) throws MalformedURLException, ClassNotFoundException {
-        
-        ActionLib.testMsg(file.toURI().toURL().toString());
+
         ClassLoader loader = URLClassLoader.newInstance(
             new URL[]{ file.toURI().toURL() },
             AddonLoader.class.getClassLoader()

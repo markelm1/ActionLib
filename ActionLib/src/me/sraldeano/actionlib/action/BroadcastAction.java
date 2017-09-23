@@ -17,7 +17,7 @@ public class BroadcastAction extends Action{
 
     @Override
     public void onExecute() {
-        ActionLib.plugin.getServer().broadcastMessage(message);
+        ActionLib.plugin.getServer().broadcastMessage(replaceText(message));
     }
     
 }

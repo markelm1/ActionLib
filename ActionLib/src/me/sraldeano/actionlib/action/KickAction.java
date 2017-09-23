@@ -18,7 +18,7 @@ public class KickAction extends Action{
 
     @Override
     public void onExecute() {
-        getPlayer().kickPlayer(TextUtil.colored(message));
+        getPlayer().kickPlayer(replaceText(message));
     }
     
 }

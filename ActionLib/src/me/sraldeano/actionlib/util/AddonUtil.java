@@ -25,10 +25,9 @@ public class AddonUtil {
     
     public AddonUtil() {
         folder = new File(ActionLib.plugin.getDataFolder(), "addons");
-        if (folder == null) {
+        if (!folder.exists()) {
             folder.mkdirs();
         }
-        ActionLib.testMsg(folder);
     }
     
     public List<Action> loadAddons() {
@@ -37,7 +36,6 @@ public class AddonUtil {
         for (File jar : folder.listFiles()) {
             
             if (jar.getPath().endsWith(".jar")) {
-                ActionLib.testMsg(jar.getName());
                 try {
                     actionList.add(loadAddon(new JarFile(jar)));
                 }
@@ -54,8 +52,6 @@ public class AddonUtil {
             AddonDescription description;
             
             description = getDescription(jar);
-            ActionLib.testMsg("Name:" + description.getName());
-            ActionLib.testMsg("Jargetname: " + jar.getName());
             
             File dataFolder = new File(folder, description.getName());
             

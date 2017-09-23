@@ -12,6 +12,6 @@ public class ForceChatAction extends Action{
 
     @Override
     public void onExecute() {
-        getPlayer().chat(message);
+        getPlayer().chat(replaceText(message));
     }
 }

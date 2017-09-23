@@ -3,6 +3,10 @@ version: "1.0"
 description: "testdesc"
 main: "me.sraldeano.actionlib.ActionLib"
 name: "ActionLib"
+softdepend: [Vault]
 commands:
     actionlib:
         description: "ActionLib main command."
+permissions:
+    actionlib.admin:
+        description: "Get acces to execute every ActionLib command."

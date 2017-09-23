@@ -9,7 +9,7 @@ import org.bukkit.GameMode;
  */
 public class ChangeGamemodeAction extends Action{
 
-    public String gamemode;
+    public String gamemode = "SURVIVAL";
     
     public ChangeGamemodeAction() {
         super("ChangeGamemode");
