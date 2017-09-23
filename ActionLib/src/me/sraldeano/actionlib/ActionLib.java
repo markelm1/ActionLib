@@ -11,6 +11,7 @@ import me.sraldeano.actionlib.util.AddonUtil;
 import me.sraldeano.actionlib.util.LoadUtil;
 import me.sraldeano.actionlib.util.ReflectionUtil;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,7 @@ public class ActionLib extends JavaPlugin{
     protected static List<Action> actions = new ArrayList<>();
     protected static Map<String, Action> actionMap = new HashMap<>();
     protected static Map<String, Class<? extends Action>> actionClassMap = new HashMap<>();
+    public static Permission perms = null;
     public static ActionLib plugin;
     public Economy eco = null;
     
@@ -34,7 +36,6 @@ public class ActionLib extends JavaPlugin{
                 action = newClass.newInstance();
             } catch (InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(ActionLib.class.getName()).log(Level.SEVERE, null, ex);
-                getLogger().warning("Noooo actions error");
             }
             ActionManager.registerAction(action, false);
         }
@@ -48,6 +49,7 @@ public class ActionLib extends JavaPlugin{
         LoadUtil.registerEvents();
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             setupVault();
+            setupPermissions();
         }
     }
 
@@ -88,5 +90,11 @@ public class ActionLib extends JavaPlugin{
         }
 
         return (eco != null);
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
     }
 }

@@ -1,6 +1,6 @@
 author: "SrAldeano"
-version: "1.0"
-description: "testdesc"
+version: "1.0.1"
+description: "Perform actions on players"
 main: "me.sraldeano.actionlib.ActionLib"
 name: "ActionLib"
 softdepend: [Vault]

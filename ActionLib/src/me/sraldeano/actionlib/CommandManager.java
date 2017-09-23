@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.sraldeano.actionlib.util.TextUtil;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,14 +23,25 @@ import org.bukkit.entity.Player;
  */
 public class CommandManager implements CommandExecutor{
 
+    private static String[] help = {
+        "&6&m------------&r&6[Commands]&6&m-------------",
+        "&e/actionlib testaction (Action) [Args]",
+        "&cPerform an Action on yourself",
+        "&e/actionlib about",
+        "&cGet basic plugin info",
+        "&e/actionlib addons",
+        "&cGet a list of loaded addons",
+        "&e/actionlib reload",
+        "&cReload the configuration",
+        "&e/actionlib help",
+        "&cShows this help message",
+        "&6&m------------&r&6[Commands]&6&m-------------"
+    };
+
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String main, String[] args) {
         if (args.length == 0) {
-            cs.sendMessage(TextUtil.colored("&ePlease use one of the following subcommands:"));
-            cs.sendMessage(TextUtil.colored("&a/actionlib testaction (Action) [Args]"));
-            cs.sendMessage(TextUtil.colored("&a/actionlib about"));
-            cs.sendMessage(TextUtil.colored("&a/actionlib addons"));
-            cs.sendMessage(TextUtil.colored("&a/actionlib reload"));
+            cs.sendMessage(TextUtil.colored(help));
             return true;
         }
         if (cs instanceof  Player) {
@@ -72,13 +84,13 @@ public class CommandManager implements CommandExecutor{
             }
             case "reload" : {
                 ActionLib.plugin.reloadConfig();
-                cs.sendMessage("Config reloaded.");
+                cs.sendMessage(ChatColor.GREEN + "Config reloaded.");
                 break;
             }
             case "addons" : {
                 List<Action> actionList = ActionLib.getAddonActions();
                 if (actionList.size() < 1) {
-                    cs.sendMessage("Currently there are not addons loaded.");
+                    cs.sendMessage(ChatColor.YELLOW + "Currently there are not addons loaded.");
                     return true;
                 }
                 cs.sendMessage(ChatColor.GREEN + "Currently loaded addons:");
@@ -87,6 +99,13 @@ public class CommandManager implements CommandExecutor{
                 }
                 break;
             }
+            case "help" : {
+                cs.sendMessage(TextUtil.colored(help));
+                break;
+            }
+            default:
+                cs.sendMessage(TextUtil.colored(help));
+                break;
         }
         return true;
     }
