@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ActionLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ActionLib/ActionLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

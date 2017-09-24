@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bukkit-latest-shaded">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ActionLib/lib/bukkit-latest-shaded.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
