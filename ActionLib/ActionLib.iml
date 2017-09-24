@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bukkit-latest-shaded" level="project" />
+    <orderEntry type="library" name="Vault" level="project" />
+    <orderEntry type="library" name="bungeecord-api-1.12-20170923.071506-39" level="project" />
   </component>
 </module>
