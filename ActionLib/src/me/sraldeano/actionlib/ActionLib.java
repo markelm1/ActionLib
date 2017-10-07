@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import me.sraldeano.actionlib.util.AddonUtil;
 import me.sraldeano.actionlib.util.LoadUtil;
 import me.sraldeano.actionlib.util.ReflectionUtil;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,15 +32,12 @@ public class ActionLib extends JavaPlugin{
             try {
                 action = newClass.newInstance();
             } catch (InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(ActionLib.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             ActionManager.registerAction(action, false);
         }
         new AddonUtil().loadAddons();
         getServer().getLogger().info("ActionLib was loaded successfully.");
-        for (Action a : actions) {
-            getLogger().severe("- " + a.getName());
-        }
         getServer().getPluginCommand("actionlib").setExecutor(new CommandManager());
         saveDefaultConfig();
         LoadUtil.registerEvents();
@@ -57,10 +51,7 @@ public class ActionLib extends JavaPlugin{
     public void onDisable() {
         getServer().getLogger().fine("ActionLib was unloaded successfully.");
     }
-    
-    public static void sendAction(Player receiver, Action action) {
-        
-    }
+
 
     public static List<Action> getActions() {
         return actions;

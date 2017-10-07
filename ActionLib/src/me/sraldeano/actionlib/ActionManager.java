@@ -199,7 +199,6 @@ public class ActionManager {
                             try {
                                 if (secondMap.containsKey(f.getName())) {
                                     ReflectionUtil.setField(f, secondMap.get(f.getName()), action);
-                                    System.out.println(secondMap);
                                 }
                             } catch (IllegalArgumentException ex) {
                                 ex.printStackTrace();

@@ -12,8 +12,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import me.sraldeano.actionlib.Action;
@@ -63,18 +61,18 @@ public class AddonUtil {
             
             return new AddonLoader(description, new File(folder, jarName), dataFolder).getAction();
         } catch (MalformedURLException | ClassNotFoundException ex) {
-            Logger.getLogger(AddonUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             return null;
         }
     }
-    
+
     public AddonDescription getDescription(JarFile jar) {
         ZipEntry entry = jar.getEntry("addon.yml");
         InputStream stream = null;
         try {
             stream = jar.getInputStream(entry);
         } catch (IOException ex) {
-            Logger.getLogger(AddonUtil.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return new AddonDescription(stream);
     }
