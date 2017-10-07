@@ -46,7 +46,9 @@ public class TitleUtil {
         Constructor <?> packetConstructor = null;
         try {
             packetConstructor = packetClass.getConstructor(enumTitleAction, componentClass, int.class, int.class, int.class);
-        } catch (NoSuchMethodException | SecurityException e) {}
+        } catch (NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+        }
         if (subtitle != null) {
             Object subTitleSer;
             Object subTitlePacket;
@@ -57,7 +59,9 @@ public class TitleUtil {
                         stay.intValue(), fadeOut.intValue()
                 );
                 sendPacket(p, subTitlePacket);
-            } catch (Exception e){}
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         if (title != null) {
             Object ser;
@@ -66,7 +70,9 @@ public class TitleUtil {
                 ser = serializerClass.getMethod("a", String.class).invoke(null, "{\"text\": \"" + title + "\"}");
                 packet = packetConstructor.newInstance(enumTitleAction.getEnumConstants()[0], ser, fadeIn.intValue(), stay.intValue(), fadeOut.intValue());
                 sendPacket(p, packet);
-            } catch (Exception e){}
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -76,7 +82,9 @@ public class TitleUtil {
         try {
             clazz = Class.forName(className);
         }
-        catch (ClassNotFoundException ex){}
+        catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
         return clazz;
     }
 
@@ -106,6 +114,6 @@ public class TitleUtil {
                 }
             }
             playerSendPacket.invoke(playerConnection.get(getHandle(p)), packet);
-        } catch (Exception e) {}
+        } catch (Exception e) {e.printStackTrace();}
     }
 }

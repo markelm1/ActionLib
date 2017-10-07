@@ -3,7 +3,7 @@
 #Developed by SrAldeano (MarkelM16)
 events:
 #   These actions will be fired when some of the event occur
-#   You can use the following events: join, kill, fish, first-join, tame, chat, first-join, leave, death and teleport.
+#   You can use the following events: join, kill, fish, first-join, tame, chat, first-join, leave, death, teleport and pickup.
     join:
         - '[Message] Welcome again %player% to the server!'
         - '[Give]' :
@@ -12,15 +12,16 @@ events:
     kill:
         - '[VaultGive] 30'
     fish:
-        - '[Broadcast] &6%player% catch a fish!'
+        - '[Broadcast] &6%player% caught a fish!'
     first-join:
         - '{Welcome}'
 
 actions:
-#  Create action-packs, send them using {YourPack}. *Names can be custom but not repeated
+#  Here you can create action-packs
+#  Then you can send them using {YourPack}. *Names can be custom but not repeated
    KillPlayer:
         - '[Kill]'
-        - '[Message] You died by mistycal powers.'
+        - '[Message] You died by mystical powers.'
    Welcome:
         - '[Broadcast] &a&l%player% &bis new on the server!'
         - '[Title]' :

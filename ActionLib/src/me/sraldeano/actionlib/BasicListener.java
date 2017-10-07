@@ -3,16 +3,16 @@ package me.sraldeano.actionlib;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import me.sraldeano.actionlib.util.TitleUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 /**
  *
@@ -24,6 +24,8 @@ public class BasicListener implements Listener{
     
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        TitleUtil.sendActionBar(e.getPlayer(), "heloooooooooo");
+        TitleUtil.sendTitle(e.getPlayer(), "sss", "aaaa", 10, 20, 30);
         if (!e.getPlayer().hasPlayedBefore()) {
             sendEvent(e.getPlayer(), e, "first-join", null);
             return;
@@ -56,10 +58,12 @@ public class BasicListener implements Listener{
     }
     @EventHandler
     public void onFish(PlayerFishEvent e) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("caught", e.getCaught());
-        map.put("fishState", e.getState());
-        sendEvent(e.getPlayer(), e, "fish", map);
+        if (e.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("caught", e.getCaught());
+            map.put("fishState", e.getState());
+            sendEvent(e.getPlayer(), e, "fish", map);
+        }
     }
     
     @EventHandler
@@ -73,14 +77,23 @@ public class BasicListener implements Listener{
     public void onChat(AsyncPlayerChatEvent e) {
         sendEvent(e.getPlayer(), e, "chat", null);
     }
+
+    @EventHandler
+    public void onPickup(PlayerPickupItemEvent e) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("item", e.getItem());
+        sendEvent(e.getPlayer(), e, "pickup", map);
+    }
     
     public static void sendEvent(Player player, Event event, String eventConfig, Map<String, Object> variables) {
+        if (!ActionLib.plugin.getConfig().isSet("events." + eventConfig)) {
+            return;
+        }
         List<Action> actions;
         if (variables == null) {
             variables = new HashMap<String, Object>();
         }
         variables.put("event", event);
-        System.out.println("events." + eventConfig);
         actions = ActionManager.buildActions(ActionLib.plugin.getConfig(), "events." + eventConfig);
         if (actions != null) {
             for (Action a : actions) {

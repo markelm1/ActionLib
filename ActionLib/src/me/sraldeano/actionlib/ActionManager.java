@@ -147,7 +147,8 @@ public class ActionManager {
         try {
             return buildActions(list);
         } catch (Exception e) {
-            Util.getLogger().severe("The list '" + path + "' in the configuration " + config.getName() + " contains has an error");
+            Util.getLogger().severe("The list '" + path + "' in the configuration " + config.getName() + " contains an error");
+            e.printStackTrace();
         }
         return null;
     }
@@ -166,7 +167,8 @@ public class ActionManager {
                 else if (keyString.startsWith("[")) {
                     String[] splited = keyString.split(" ", 2);
                     String actionName = splited[0].replace("[", "").replace("]", "");
-                    action = new ActionManager().setAction(actionName).setSettings(keyString.replace(splited[0], "")).build();
+                    String settings = keyString.replace(splited[0], "").replaceFirst(" ", "");
+                    action = new ActionManager().setAction(actionName).setSettings(settings).build();
                     actions.add(action);
                 }
                 else if (keyString.startsWith("{")) {
@@ -191,11 +193,15 @@ public class ActionManager {
                             ex.printStackTrace();
                         }
                     }
+
                     else {
                         for (Field f : action.getClass().getFields()) {
                             try {
-                                f.set(action, secondMap.get(f.getName()));
-                            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                                if (secondMap.containsKey(f.getName())) {
+                                    ReflectionUtil.setField(f, secondMap.get(f.getName()), action);
+                                    System.out.println(secondMap);
+                                }
+                            } catch (IllegalArgumentException ex) {
                                 ex.printStackTrace();
                             }
                         }

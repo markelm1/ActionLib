@@ -42,7 +42,8 @@ public class TextUtil {
         map.put("%health%", player.getHealth() + "");
         map.put("%xp%", player.getExp() + "");
         if (Util.isUsingVault()) {
-            map.put("%money%", ActionLib.plugin.eco.getBalance(player) + "");
+
+            //map.put("%money%", ActionLib.plugin.eco.getBalance(player) + "");
         }
         map.put("%display_name%", player.getDisplayName());
         map.put("%uuid%", player.getUniqueId().toString());

@@ -4,12 +4,14 @@ import me.sraldeano.actionlib.Action;
 
 public class SetFlyingAction extends Action{
 
+    public boolean fly = true;
+
     public SetFlyingAction() {
         super("SetFlying");
     }
 
     @Override
     public void onExecute() {
-        getPlayer().setFlying(true);
+        getPlayer().setFlying(fly);
     }
 }
