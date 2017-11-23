@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -23,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ItemUtil {
+
     /**
      * Converts a ConfigurationSection into an ItemStack
      * Included options:
@@ -178,6 +178,23 @@ public class ItemUtil {
     public static ItemStack itemConstructor(Map<String, Object> map) {
         MemorySection sect = Util.mapToMemorySection(map);
         return itemConstructor(sect);
+    }
+
+    /**
+     * Creates various ItemStacks
+     * @param section a section wich includes one or more item-sections
+     * @return ArrayList of ItemStacks created
+     * @since 1.0.5
+     */
+
+    public static List<ItemStack> itemsConstructor(ConfigurationSection section) {
+        ArrayList<ItemStack> items = new ArrayList<>();
+        Set<String> keys = section.getKeys(false);
+        for (String key : keys) {
+            ItemStack item = itemConstructor(section.getConfigurationSection(key));
+            items.add(item);
+        }
+        return items;
     }
 
     public static FireworkMeta fireworkMetaConstructor(ItemStack item, ConfigurationSection section) {
